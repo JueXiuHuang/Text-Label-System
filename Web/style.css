@@ -1,0 +1,38 @@
+.form-select {
+    margin-top:15px;
+    width: 50%;
+}
+
+#file_selector {
+    display: inline;
+}
+
+#exampleDataList {
+    margin-top:15px;
+    width: 40%;
+    display: inline;
+    margin-left: 10px;
+}
+
+#card_content{
+    height:400px;
+}
+
+#label_result_panel{
+    height:500px;
+}
+
+#select_1, #select_2, #select_3 {
+    margin-top: 15px;
+}
+
+span {
+    /* border: 2px solid black; */
+    display: inline-block;
+    width: fit-content;
+    margin-left: 5px;
+}
+
+.btn-close {
+    margin-left: 10px;
+}

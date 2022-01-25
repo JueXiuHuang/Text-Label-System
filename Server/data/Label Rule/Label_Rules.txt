@@ -1,0 +1,34 @@
+Entity
+	*Per
+	*Org
+	*Loc
+	*Fac
+	*Veh
+	*Wea
+	*Gpe
+Event
+	Life
+		*Be-Born
+			Trigger
+			Person
+			Time
+			Place
+		*Marry
+			Trigger
+			Person
+			Time
+			Place
+	Movement
+		*Transport
+			Trigger
+			Agent
+			Transporter
+	Conflict
+		*Attack
+			Trigger
+			Attacker
+			Target
+		*Demonstrate
+			Trigger
+			Entity
+			Place
