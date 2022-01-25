@@ -37,10 +37,10 @@ Once you have define your own label tree, put the file into this folder.
 `file` folder is under `Server` folder. This folder contains the documents that you want to label. If you have a new document, just put it into this folder.
 
 ## Label Tree
-Label Tree is a tree like text file which describe your label architecture.
 ![](https://i.imgur.com/7LZE61p.png)
+Label Tree is a tree like text file which describe your label architecture.
 For each label, you should put a * icon infront of it, and system will give this label a specific color to help you identify it.
-For each label, you can define its sub-label.
+For each label, you can define its sub-labels.
 You can also sort these labels into several category to help you find them.
 
 ## Label System browser
