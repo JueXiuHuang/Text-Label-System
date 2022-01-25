@@ -38,6 +38,7 @@ Once you have define your own label tree, put the file into this folder.
 
 ## Label Tree
 ![](https://i.imgur.com/7LZE61p.png)
+
 Label Tree is a tree like text file which describe your label architecture.
 For each label, you should put a * icon infront of it, and system will give this label a specific color to help you identify it.
 For each label, you can define its sub-labels.
