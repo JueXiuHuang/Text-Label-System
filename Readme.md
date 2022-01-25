@@ -22,6 +22,7 @@ Access to `Text-Label-System` folder and run `Install requirements.bat` file.
 
 ## File Description
 Below is the folder tee of this project
+
 ![](https://i.imgur.com/7uSPfXx.png)
 
 ### Label Rule Folder
