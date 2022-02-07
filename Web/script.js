@@ -6,6 +6,7 @@ var files_json;
 var selection_id_list = [];
 
 var label_rule = '';
+var tok_list;
 var tokenization_rule = '';
 var args = [];
 var taggings = [];
@@ -80,9 +81,32 @@ function tree_dfs(node) {
     }
 }
 
-// TODO:
 // event listerer when click download button
 function click_download() {
+    let cp_tokList = Array.from(tok_list)
+    for (let i = 0; i < taggings.length; i++) {
+        for (let j = 0; j < taggings[i]['args'].length; j++) {
+            console.log(taggings[i]['args'][j])
+            let start = taggings[i]['args'][j]['Start']
+            let end = taggings[i]['args'][j]['End']
+            let tag_name = taggings[i]['args'][j]['Arg_type']
+
+            cp_tokList[start] = '[' + cp_tokList[start]
+            cp_tokList[end - 1] = cp_tokList[end - 1] + ']' + tag_name
+        }
+    }
+
+    upload_str = ''
+    for (let i = 0; i < cp_tokList.length; i++) {
+        upload_str += cp_tokList[i]
+    }
+
+    let url = 'http://127.0.0.1:8000/Download'
+    let data = {
+        'Text': upload_str,
+        'FileName': files_json[file_selector.value].file_name
+    };
+    post_result_to_server(url, data)
 }
 
 function post_result_to_server(url, data) {
@@ -95,8 +119,7 @@ function post_result_to_server(url, data) {
     }).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => console.log('Success:', response))
-        .then(response => alert("Save Successfully!"));
-
+        .then(response => alert("Success!"));
 }
 
 // event listerer when click save button
@@ -629,7 +652,6 @@ function get_tagged_tags(file_name) {
             return response.json();
         })
         .then(function (myJson) {
-            console.log(myJson)
             load_previous_tag(myJson);
         });
 }
@@ -658,7 +680,7 @@ function display_story(f_title, f_cont) {
     while (content.firstChild) {
         content.removeChild(content.firstChild);
     }
-    var tok_list = tokenization(f_cont);
+    tok_list = tokenization(f_cont);
     for (let i = 0; i < tok_list.length; i++) {
         let spam = document.createElement('spam');
         spam.innerHTML = tok_list[i];

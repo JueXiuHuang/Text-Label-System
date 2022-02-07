@@ -40,6 +40,21 @@ class AnnotationJson(BaseModel):
     Doc_name:str
     Mentions:List[SingleAnnotation] = []
 
+class DownloadTextJson(BaseModel):
+    Text:str
+    FileName:str
+
+@app.post('/Download')
+def save_text(res:DownloadTextJson):
+    data = jsonable_encoder(res)
+    file_name = data['FileName']
+    text = data['Text']
+    
+    os.makedirs('Download', exist_ok=True)
+    p = 'Download/'+file_name
+    with open(p, 'w', encoding='utf-8') as fp:
+        fp.write(text)
+
 @app.post('/Save')
 def save_result(res:AnnotationJson):
     data = jsonable_encoder(res)
