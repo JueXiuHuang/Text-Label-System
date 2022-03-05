@@ -4,6 +4,7 @@ from lib2to3.pytree import Base
 import os
 import uvicorn
 import json
+import pandas as pd
 from urllib.parse import unquote
 
 from fastapi import FastAPI, File, UploadFile
@@ -65,6 +66,8 @@ def save_result(res:AnnotationJson):
     with open(path, 'w', encoding='utf-8') as fp:
         json.dump(to_write, fp)
 
+    statistic(file_name)
+
 @app.get('/FileList')
 def get_file_list():
     ret_list = []
@@ -110,6 +113,43 @@ def get_tokenize_rule():
         rules = f.read()
     
     return rules
+
+def statistic(fn):
+    path = './history/' + fn
+    with open(path, 'r') as f:
+        labels = json.load(f)
+    
+    # key is text, value is appreance count
+    record = {}
+
+    for label in labels:
+        for arg in label['Arguments']:
+            text = arg['Text'].lower()
+            type_ = arg['Arg_type']
+            if record.get((text, type_)) == None:
+                record[(text, type_)] = 1
+            else:
+                record[(text, type_)] += 1
+
+    text_list = []
+    type_list = []
+    count_list = []
+    for k in record.keys():
+        text, type_ = k
+        count = record[k]
+        text_list.append(text)
+        type_list.append(type_)
+        count_list.append(count)
+
+    df_dict = {'Text':text_list, 'Label':type_list, 'Count':count_list}
+    df = pd.DataFrame(df_dict)
+    save_path = './statistic/'
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    save_path = save_path + fn.replace('.json', '.xlsx')
+    df.to_excel(save_path, encoding='utf8', index=False)
+
+    return
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
