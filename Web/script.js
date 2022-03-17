@@ -525,7 +525,7 @@ function file_searched(search_bar) {
             refresh_tag_display();
             refresh_args_display();
             display_story(files_json[i].file_name, files_json[i].file_content);
-            get_tagged_tags(encodeURI(files_json[val].file_name));
+            get_tagged_tags(encodeURI(files_json[i].file_name));
         }
     }
 }
