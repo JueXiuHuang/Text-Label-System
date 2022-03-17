@@ -13,6 +13,7 @@ var taggings = [];
 var temp_tag = [];
 
 var NodeID2RGB = {}
+var NodePath2RGB = {}
 
 function Node(id, value, level) {
     this.node_id = id;
@@ -24,7 +25,7 @@ function Node(id, value, level) {
 
 class Label_tree {
     constructor() {
-        let rootNode = new Node('root', 0);
+        let rootNode = new Node(-1, 'root', 0);
         this.root = rootNode;
     }
     add(child, parent) {
@@ -35,7 +36,59 @@ class Label_tree {
 
 var label_tree = new Label_tree()
 
+function get_abs_path(current_node) {
+    abs_path = current_node.value
+    while (current_node.level > 0) {
+        parent = current_node.parent
+        abs_path = parent.value + '_' + abs_path
+        current_node = parent
+    }
+
+    return abs_path
+}
+
+// construct Node2RGB with abs path
 function construct_label_tree(label_rule_text) {
+    labels = label_rule_text.split('\n')
+    let current_node = label_tree.root;
+
+    for (let i = 0; i < labels.length; i++) {
+        has_star = false
+        let val = labels[i].replace(/\t+/g, '')
+        let level = (labels[i].match(/\t/g) || []).length + 1
+        if (val.charAt(0) == '*') {
+            has_star = true;
+            val = val.substring(1);
+        }
+        // if (val.charAt(0) == '*') {
+        //     val = val.substring(1);
+        //     let { r, g, b } = rgb_generator();
+
+        //     NodeID2RGB[i] = { 'R': r, 'G': g, 'B': b }
+        // }
+
+        let node = new Node(i, val, level)
+        if (node.level > current_node.level) {
+            label_tree.add(node, current_node);
+            current_node = node;
+        } else {
+            while (node.level <= current_node.level) {
+                current_node = current_node.parent;
+            }
+            label_tree.add(node, current_node);
+            current_node = node;
+        }
+
+        if (has_star) {
+            let { r, g, b } = rgb_generator();
+            ancestor_str = get_abs_path(node)
+            NodePath2RGB[ancestor_str] = { 'R': r, 'G': g, 'B': b }
+        }
+    }
+}
+
+// old version construct Node2RGB with unique id
+function construct_label_tree_old(label_rule_text) {
     labels = label_rule_text.split('\n')
     let current_node = label_tree.root;
     for (let i = 0; i < labels.length; i++) {
@@ -86,7 +139,6 @@ function click_download() {
     let cp_tokList = Array.from(tok_list)
     for (let i = 0; i < taggings.length; i++) {
         for (let j = 0; j < taggings[i]['args'].length; j++) {
-            console.log(taggings[i]['args'][j])
             let start = taggings[i]['args'][j]['Start']
             let end = taggings[i]['args'][j]['End']
             let tag_name = taggings[i]['args'][j]['Arg_type']
@@ -141,7 +193,7 @@ function click_save() {
             tag_args.push(arg)
         }
         let single_tag = {
-            'colorNodeID': taggings[i]['colorNodeID'],
+            'Abs_path': taggings[i]['abs_path'],
             'Arguments': tag_args
         }
         mentions.push(single_tag)
@@ -167,26 +219,22 @@ function click_Done() {
     }
 
     // follow the tree and option history, find the color
-    let startNode = label_tree.root;
-    let colorNodeID;
+    let root = label_tree.root;
+    let abs_path = root.value
+
     for (let i = 0; i < historyOptions.length; i++) {
-        if (startNode.node_id in NodeID2RGB) {
-            rgb = NodeID2RGB[startNode.node_id]
-            colorNodeID = startNode.node_id
+        abs_path = abs_path + '_' + historyOptions[i]
+        if (abs_path in NodePath2RGB) {
+            rgb = NodePath2RGB[abs_path]
             break
         }
-        for (let j = 0; j < startNode.children.length; j++) {
-            if (startNode.children[j].value == historyOptions[i]) {
-                startNode = startNode.children[j];
-                break;
-            }
-        }
     }
+
     let dict;
     dict = {
         'args': args,
         'color': rgb,
-        'colorNodeID': colorNodeID
+        'abs_path': abs_path
     }
 
     taggings.push(dict);
@@ -234,21 +282,22 @@ function click_CreateArg() {
     refresh_args_display();
 }
 
-// TODO:
 // event listener when click tag
 function click_tag(wrapper) {
     let num = wrapper.dataset.value;
+    let abs_path = taggings[num]['abs_path']
     args = taggings[num]['args'];
 
-    // let sel2_val = taggings[num]['event_type'];
-    // for (let key in menu1_menu2) {
-    //     if (menu1_menu2[key].includes(sel2_val)) {
-    //         select1.value = key;
-    //         select1_changed();
-    //         select2.value = sel2_val;
-    //         break;
-    //     }
-    // }
+    hist_opt = abs_path.split('_')
+    // remove 'root'
+    hist_opt.splice(0, 1)
+
+    for (let i = 0; i < hist_opt.length; i++) {
+        let selection = document.getElementById(selection_id_list[i])
+        selection.value = hist_opt[i]
+        selection_changed(selection)
+    }
+
     taggings.splice(num, 1);
 
     refresh_tag_display();
@@ -463,7 +512,6 @@ function file_selected() {
     refresh_tag_display();
     refresh_args_display();
     display_story(files_json[val].file_name, files_json[val].file_content);
-    // console.log(files_json[val].file_name)
     get_tagged_tags(encodeURI(files_json[val].file_name));
 }
 
@@ -617,12 +665,11 @@ function get_label_rule() {
 
 function load_previous_tag(tags) {
     for (let i = 0; i < tags.length; i++) {
-        let colorNodeID = tags[i]['colorNodeID'];
-        let color = NodeID2RGB[colorNodeID];
+        let abs_path = tags[i]['Abs_path']
+        let color = NodePath2RGB[abs_path]
 
         for (let j = 0; j < tags[i]["Arguments"].length; j++) {
             let arg_type = tags[i]["Arguments"][j]["Arg_type"];
-            // let arg_path = tags[i]["label"]["Arguments"][j]["Arg_path"];
             let text = tags[i]["Arguments"][j]["Text"];
             let start = tags[i]["Arguments"][j]["Start"];
             let end = tags[i]["Arguments"][j]["End"];
@@ -632,7 +679,7 @@ function load_previous_tag(tags) {
         }
 
         dict = {
-            'colorNodeID': colorNodeID,
+            'abs_path': abs_path,
             'color': color,
             'args': args
         };

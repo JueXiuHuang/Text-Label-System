@@ -34,7 +34,7 @@ class Args(BaseModel):
     End:str
 
 class SingleAnnotation(BaseModel):
-    colorNodeID:int
+    Abs_path:str
     Arguments:List[Args] = []
 
 class AnnotationJson(BaseModel):
@@ -123,9 +123,11 @@ def statistic(fn):
     record = {}
 
     for label in labels:
+        abs_path = label['Abs_path']
         for arg in label['Arguments']:
             text = arg['Text'].lower()
             type_ = arg['Arg_type']
+            type_ = abs_path + '_' + type_
             if record.get((text, type_)) == None:
                 record[(text, type_)] = 1
             else:
