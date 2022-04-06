@@ -35,7 +35,7 @@ After opening terminal, type `python --version` in the terminal, if you install 
 ![](https://i.imgur.com/p9aCSpp.png)
 
 #### Install require packages
-Access to `Text-Label-System` folder and run `Install requirements.bat` file.
+Access to `Text-Label-System` folder and run `Install requirements.bat` file (just double click).
 ![](https://i.imgur.com/VzUssRg.png)
 
 
