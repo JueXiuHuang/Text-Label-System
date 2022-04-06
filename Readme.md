@@ -40,18 +40,20 @@ Access to `Text-Label-System` folder and run `Install requirements.bat` file (ju
 
 
 ### Mac guide
-We need python3
-
-
+We need python3, please access [website](https://www.dataquest.io/blog/installing-python-on-mac/) to install python first.
 
 #### Check your python
-Open Terminal (Windows OS)
-![](https://i.imgur.com/GgFsk5v.png)
+Open Terminal (Search 'Terminal' on spotilight)
 
 After opening terminal, type `python --version` in the terminal, if you install python successfully, you can get installed python version.
 ![](https://i.imgur.com/p9aCSpp.png)
 
 #### Install require packages
+Open your terminal again, navigate to the Text-Label-System folder, it usually in your download folder.
+To navigate to certain folder, type `cd folder_name` in your termianl, and use `ls` to check what folder or files in your current directory.
+<img width="462" alt="截圖 2022-04-06 下午9 09 35" src="https://user-images.githubusercontent.com/32955131/161982281-3747e1c7-f6f3-4ae6-b0e4-d24743d2d229.png">
+
+After arrive Text-Label-System folder, type `bash Install_requirement.sh` to insall require packages.
 
 
 
@@ -73,7 +75,9 @@ Once you have define your own label tree, put the file into this folder.
 `file` folder is under `Server` folder. This folder contains the documents that you want to label. If you have a new document, just put it into this folder.
 
 
+
 ## Label Tree
+
 ![](https://i.imgur.com/7LZE61p.png)
 
 Label Tree is a tree like text file which describe your label architecture.
@@ -81,28 +85,38 @@ For each label, you should put a * icon infront of it, and system will give this
 For each label, you can define its sub-labels.
 You can also sort these labels into several category to help you find them.
 
+
+
 ## Label System browser
 Below is the overview of Label System browser.
+
 ![](https://i.imgur.com/PMcqGSe.png)
 
 You can use the selection bar at top right corner to choose document.
+
 ![](https://i.imgur.com/Zvz7lqZ.png)
 
 Highlight the words you want to label, and choose the corresponding label.
 When your mouse is over the label, corresponding label and it text will highlight.
-![](https://i.imgur.com/0M5tsHN.gif)
 
+![](https://i.imgur.com/0M5tsHN.gif)
 
 
 
 ## Run Text Label System
 ### Start local server (Windows)
 Access to `Test-Label-System\Server` folder and run `Run Server.bat`
+**Do not close terminal when you are running server!!**
+
 ![](https://i.imgur.com/tWzXu74.png)
 
 ### Start local server (Mac)
+Open Terminal and navigate to folder `Text-Label-System\Server` and type `bash Run_Server.sh`
+**Do not close terminal when you are running server!!**
 
+<img width="568" alt="截圖 2022-04-06 下午9 16 05" src="https://user-images.githubusercontent.com/32955131/161983421-5e196888-c697-414d-8d97-b4ffce385b8c.png">
 
 ### Open Label System browser
 Access to `Test-Label-System\Web` and open `webpage.html` (usually it will open with browser automatically)
+
 ![](https://i.imgur.com/oRBc7pJ.png)
