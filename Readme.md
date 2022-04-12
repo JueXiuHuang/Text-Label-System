@@ -5,6 +5,7 @@ Contact `joshua87719@gmail.com` if you have other question.
 We highly recommend you read this document in browser, or view this document online at [github](https://github.com/JueXiuHuang/Text-Label-System.git)
 
 ## Contents
+* [How to use this tool](#how-to-use-this-tool)
 * Install
   * [Windows guide](#windows-guide)
   * [Mac guide](#mac-guide)
@@ -19,6 +20,20 @@ We highly recommend you read this document in browser, or view this document onl
   * [Start local server (Mac)](#start-local-server-mac)
   * [Open Label System browser](#open-label-system-browser)
 
+
+
+## How to use this tool
+Step 1, install python if you haven't install it before. Refer to [Windows guide](#windows-guide) or [Mac guide](#mac-guide) for more details.
+
+Step 2, put the text file into folder `Text-Label-System/Server/file/`.
+
+Step 3, change the label rule file in `Text-Label-System/Server/data/Label Rule/`. Refer to [Label Rule Folder](#label-rule-folder) for more details.
+
+Step 4, change the tokenize rule file according to your text file language with regular expression in `Text-Label-System/Server/data/Tokenize Rule/`. Refer to [Label Tree](#label-tree) for more details.
+
+Step 5, open server. Refer to [Start local server (Windows)](#start-local-server-windows) or [Start local server (Mac)](#start-local-server-mac) for more detail.
+
+Step 6, open web and start tagging! Refer to [Label System browser](#label-system-browser) and [Open Label System browser](#open-label-system-browser) for more details.
 
 
 ## Install
