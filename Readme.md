@@ -58,7 +58,7 @@ Access to `Text-Label-System` folder and run `Install requirements.bat` file (ju
 We need python3, please access [website](https://www.dataquest.io/blog/installing-python-on-mac/) to install python first.
 
 #### Check your python
-Open Terminal (Search 'Terminal' on spotilight)
+Open Terminal (Search 'Terminal' on spotlight)
 
 After opening terminal, type `python --version` in the terminal, if you install python successfully, you can get installed python version.
 ![](https://i.imgur.com/p9aCSpp.png)
