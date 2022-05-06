@@ -105,14 +105,22 @@ def get_label_rule():
 
     return rules
     
-@app.get('/TokenizeRule')
-def get_tokenize_rule():
+@app.get('/TokenizeRule/{f_name}')
+def get_tokenize_rule(f_name:str):
+    fn = f_name + '.txt'
     tokenize_rule_path = './data/Tokenize Rule/'
-    fn = os.listdir(tokenize_rule_path)[0]
     with open(tokenize_rule_path+fn, 'r', encoding='utf-8') as f:
         rules = f.read()
     
     return rules
+
+@app.get('/LanguageList')
+def get_language():
+    tokenize_rule_path = './data/Tokenize Rule/'
+    langs = os.listdir(tokenize_rule_path)
+    langs = [lang.replace('.txt', '') for lang in langs]
+
+    return langs
 
 def statistic(fn):
     path = './history/' + fn

@@ -1,9 +1,13 @@
 .form-select {
     margin-top:15px;
-    width: 50%;
+    width: 25%;
 }
 
 #file_selector {
+    display: inline;
+}
+
+#language_selector {
     display: inline;
 }
 
@@ -22,8 +26,8 @@
     height:500px;
 }
 
-#select_1, #select_2, #select_3 {
-    margin-top: 15px;
+#selection_panel {
+    width: 150%
 }
 
 span {

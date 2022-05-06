@@ -1,4 +1,5 @@
 var file_selector = document.getElementById('file_selector');
+var lang_selector = document.getElementById('language_selector');
 var args_display = document.getElementById('args_display');
 var tag_display = document.getElementById('label_result_panel');
 
@@ -358,6 +359,45 @@ function leave_tag(wrapper) {
     }
 }
 
+function click_background() {
+    rightClickMenu = document.getElementById('right_click_menu')
+    rightClickMenu.style.display = 'none'
+}
+
+function right_click_tag(wrapper, event) {
+    event.preventDefault();
+    var top = event.layerY;
+    var left = event.layerX;
+    rightClickMenu = document.getElementById('right_click_menu')
+    rightClickMenu.style.position = 'absolute'
+    rightClickMenu.style.top = top.toString() + 'px'
+    rightClickMenu.style.left = left.toString() + 'px'
+    rightClickMenu.style.display = 'block'
+    edit_btn = document.getElementById('edit_btn')
+    edit_btn.value = wrapper.dataset.value;
+}
+
+function click_edit(btn) {
+    let num = btn.value
+    let abs_path = taggings[num]['abs_path']
+    args = taggings[num]['args'];
+
+    hist_opt = abs_path.split('_')
+    // remove 'root'
+    hist_opt.splice(0, 1)
+
+    for (let i = 0; i < hist_opt.length; i++) {
+        let selection = document.getElementById(selection_id_list[i])
+        selection.value = hist_opt[i]
+        selection_changed(selection)
+    }
+
+    taggings.splice(num, 1);
+
+    refresh_tag_display();
+    refresh_args_display();
+}
+
 function create_arg(arg_type, text, start, end) {
     let arg = {
         'Arg_type': arg_type,
@@ -454,6 +494,14 @@ function tag_displayer(i) {
     let b = taggings[i]['color']['B']
     let tag_wrapper = get_tagWrapper(i, r, g, b);
 
+    // Display abs_path for recognizing the label
+    let path_wrapper = document.createElement('div');
+    path_wrapper.style.width = 'fit-content';
+    let text = document.createElement('span');
+    text.innerHTML = taggings[i]['abs_path'].replace('root_', '');
+    path_wrapper.appendChild(text)
+    tag_wrapper.appendChild(path_wrapper)
+
     for (let j = 0; j < taggings[i]['args'].length; j++) {
         let arg_wrapper = document.createElement('div');
         arg_wrapper.style.width = 'fit-content';
@@ -477,7 +525,8 @@ function get_tagWrapper(i, r, g, b) {
     let tag_wrapper = document.createElement('div');
     tag_wrapper.setAttribute('onmouseenter', 'over_tag(this)');
     tag_wrapper.setAttribute('onmouseleave', 'leave_tag(this)');
-    tag_wrapper.setAttribute('onclick', 'click_tag(this)');
+    // tag_wrapper.setAttribute('onclick', 'click_tag(this)');
+    tag_wrapper.setAttribute('oncontextmenu', 'right_click_tag(this, event)');
     tag_wrapper.setAttribute('data-value', i);
     tag_wrapper.style.backgroundColor = 'rgba(' + r + ',' +
         g + ',' + b + ',' + unselected_opacity + ')';
@@ -703,6 +752,44 @@ function get_tagged_tags(file_name) {
         });
 }
 
+function get_language_list() {
+    let url = 'http://127.0.0.1:8000/LanguageList';
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (mytext) {
+            lang_list = mytext;
+            generate_language_list(lang_list);
+        });
+}
+
+function generate_language_list(lang_list) {
+    for (let i = 0; i < lang_list.length; i++) {
+        let option = document.createElement('option');
+        option.text = lang_list[i];
+        option.value = i;
+        lang_selector.appendChild(option);
+    }
+}
+
+function load_tokenize_rules() {
+    let val = lang_selector.options[lang_selector.selectedIndex].text;
+    let url = 'http://127.0.0.1:8000/TokenizeRule/' + val;
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (mytext) {
+            tokenization_rule = mytext;
+            if (file_selector.value != -1) {
+                i = file_selector.value
+                display_story(files_json[i].file_name, files_json[i].file_content);
+                refresh_story();
+            }
+        });
+}
+
 // generate options (file list) to file selector
 function generate_file_list() {
     var datalistOptions = document.getElementById('datalistOptions');
@@ -762,7 +849,8 @@ function rgb_generator() {
 
 get_file_data();
 get_label_rule();
-get_tokenization_rule();
+// get_tokenization_rule();
+get_language_list();
 
 var selected_opacity = 0.8;
 var unselected_opacity = 0.3;
