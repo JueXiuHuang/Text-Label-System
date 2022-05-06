@@ -61,12 +61,6 @@ function construct_label_tree(label_rule_text) {
             has_star = true;
             val = val.substring(1);
         }
-        // if (val.charAt(0) == '*') {
-        //     val = val.substring(1);
-        //     let { r, g, b } = rgb_generator();
-
-        //     NodeID2RGB[i] = { 'R': r, 'G': g, 'B': b }
-        // }
 
         let node = new Node(i, val, level)
         if (node.level > current_node.level) {

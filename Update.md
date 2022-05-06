@@ -1,3 +1,6 @@
+## Version 1.2
+1. Add version check
+
 ## Version 1.1
 1. Add language selector.
 2. Add tag abs_path to tag display.
