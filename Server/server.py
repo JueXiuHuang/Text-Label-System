@@ -5,6 +5,7 @@ import os
 import uvicorn
 import json
 import pandas as pd
+import requests
 from urllib.parse import unquote
 
 from fastapi import FastAPI, File, UploadFile
@@ -121,6 +122,23 @@ def get_language():
     langs = [lang.replace('.txt', '') for lang in langs]
 
     return langs
+
+@app.get('/VersionCheck')
+def version_check():
+    updateMdUrl = 'https://raw.githubusercontent.com/JueXiuHuang/Text-Label-System/master/Update.md'
+
+    r = requests.get(updateMdUrl)
+    if r.status_code == requests.codes.ok:
+        latest_v = r.text.split('\n')[0].replace('##', '')
+        with open('../Update.md', 'r') as f:
+            current_v = f.readline().replace('##', '').replace('\n', '')
+        if current_v == latest_v:
+            return True
+        else:
+            return False
+    else:
+        return True
+
 
 def statistic(fn):
     path = './history/' + fn

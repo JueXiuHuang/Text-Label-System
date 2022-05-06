@@ -784,6 +784,20 @@ function load_tokenize_rules() {
         });
 }
 
+function check_version() {
+    let url = 'http://127.0.0.1:8000/VersionCheck'
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (mytext) {
+            console.log(mytext)
+            if (!mytext) {
+                alert('Find new version!')
+            }
+        });
+}
+
 // generate options (file list) to file selector
 function generate_file_list() {
     var datalistOptions = document.getElementById('datalistOptions');
@@ -841,6 +855,7 @@ function rgb_generator() {
     return { r, g, b }
 }
 
+check_version();
 get_file_data();
 get_label_rule();
 // get_tokenization_rule();
