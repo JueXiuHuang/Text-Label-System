@@ -1,3 +1,6 @@
+## Version 1.3
+1. Add requests into requirements.txt
+
 ## Version 1.2
 1. Add version check
 
