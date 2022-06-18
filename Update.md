@@ -1,3 +1,6 @@
+## Version 1.4
+1. Create release, you can use this tagging tool without installing python now!!!
+
 ## Version 1.3
 1. Add requests into requirements.txt
 

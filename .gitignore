@@ -1,3 +1,8 @@
 Server/history/*
 !Server/history/Say Thank You.json
 Server/Download/*
+Server/build/*
+Server/server.exe
+Server/server.spec
+Server/dist
+Server/__pycache__
