@@ -1,3 +1,7 @@
+## Version 1.5
+1. Change the way to get current working directory
+2. Update release
+
 ## Version 1.4
 1. Create release, you can use this tagging tool without installing python now!!!
 

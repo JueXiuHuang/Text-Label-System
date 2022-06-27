@@ -2,6 +2,7 @@ from codecs import decode
 from email.mime import base
 from lib2to3.pytree import Base
 import os
+import sys
 import uvicorn
 import json
 import pandas as pd
@@ -16,7 +17,13 @@ from pydantic import BaseModel
 from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
 
-file_folder_dir = './file/'
+server_root = os.path.sep.join(sys.argv[0].split(os.path.sep)[:-1])
+# Execute as exe
+if getattr(sys, 'frozen', False):
+    server_root = os.path.sep.join(sys.argv[0].split(os.path.sep)[:-1])
+# or a script file (e.g. `.py` / `.pyw`)
+elif __file__:
+    server_root = os.getcwd()
 
 app = FastAPI()
 
@@ -52,8 +59,9 @@ def save_text(res:DownloadTextJson):
     file_name = data['FileName']
     text = data['Text']
     
-    os.makedirs('Download', exist_ok=True)
-    p = 'Download/'+file_name
+    download_dir = os.path.join(server_root, 'Download')
+    os.makedirs(download_dir, exist_ok=True)
+    p = os.path.join(download_dir, file_name)
     with open(p, 'w', encoding='utf-8') as fp:
         fp.write(text)
 
@@ -63,7 +71,7 @@ def save_result(res:AnnotationJson):
     file_name = data['Doc_name'].replace('.txt', '.json')
     to_write = data['Mentions']
     
-    path = 'history/' + file_name
+    path = os.path.join(server_root, 'history', file_name)
     with open(path, 'w', encoding='utf-8') as fp:
         json.dump(to_write, fp)
 
@@ -72,13 +80,14 @@ def save_result(res:AnnotationJson):
 @app.get('/FileList')
 def get_file_list():
     ret_list = []
-    objs = os.listdir(file_folder_dir)
+    file_dir = os.path.join(server_root, 'file')
+    objs = os.listdir(file_dir)
     objs = sorted(objs)
     for obj in objs:
-        if (os.path.isfile(file_folder_dir+obj) == True):
+        if (os.path.isfile(os.path.join(file_dir, obj)) == True):
             file_name = obj
             
-            with open(file_folder_dir+obj, 'r', encoding='utf-8') as f:
+            with open(os.path.join(file_dir, obj), 'r', encoding='utf-8') as f:
                 file_content = f.read()
                 
             ret_list.append({'file_name':file_name, 'file_content':file_content})
@@ -89,7 +98,7 @@ def get_file_list():
 def get_previous_record(f_name:str):
     f_name = unquote(f_name)
     f_name = f_name.replace('.txt', '.json')
-    f_path = 'history/' + f_name
+    f_path = os.path.join(server_root, 'history', f_name)
     labels = []
     if os.path.exists(f_path):
         with open(f_path, 'r') as f:
@@ -99,9 +108,9 @@ def get_previous_record(f_name:str):
 
 @app.get('/LabelRule')
 def get_label_rule():
-    label_rule_path = './data/Label Rule/'
+    label_rule_path = os.path.join(server_root, 'data', 'Label Rule')
     fn = os.listdir(label_rule_path)[0]
-    with open(label_rule_path+fn, 'r') as f:
+    with open(os.path.join(label_rule_path, fn), 'r') as f:
         rules = f.read()
 
     return rules
@@ -109,15 +118,15 @@ def get_label_rule():
 @app.get('/TokenizeRule/{f_name}')
 def get_tokenize_rule(f_name:str):
     fn = f_name + '.txt'
-    tokenize_rule_path = './data/Tokenize Rule/'
-    with open(tokenize_rule_path+fn, 'r', encoding='utf-8') as f:
+    tokenize_rule_path = os.path.join(server_root, 'data', 'Tokenize Rule')
+    with open(os.path.join(tokenize_rule_path, fn), 'r', encoding='utf-8') as f:
         rules = f.read()
     
     return rules
 
 @app.get('/LanguageList')
 def get_language():
-    tokenize_rule_path = './data/Tokenize Rule/'
+    tokenize_rule_path = os.path.join(server_root, 'data', 'Tokenize Rule')
     langs = os.listdir(tokenize_rule_path)
     langs = [lang.replace('.txt', '') for lang in langs]
 
@@ -130,7 +139,8 @@ def version_check():
     r = requests.get(updateMdUrl)
     if r.status_code == requests.codes.ok:
         latest_v = r.text.split('\n')[0].replace('##', '')
-        with open('../Update.md', 'r') as f:
+        Update_p = server_root.replace('Server', 'Update.md')
+        with open(Update_p, 'r') as f:
             current_v = f.readline().replace('##', '').replace('\n', '')
         if current_v == latest_v:
             return True
@@ -141,7 +151,8 @@ def version_check():
 
 
 def statistic(fn):
-    path = './history/' + fn
+    print('Statistic...')
+    path = os.path.join(server_root, 'history', fn)
     with open(path, 'r') as f:
         labels = json.load(f)
     
@@ -171,10 +182,10 @@ def statistic(fn):
 
     df_dict = {'Text':text_list, 'Label':type_list, 'Count':count_list}
     df = pd.DataFrame(df_dict)
-    save_path = './statistic/'
+    save_path = os.path.join(server_root, 'statistic')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    save_path = save_path + fn.replace('.json', '.xlsx')
+    save_path = os.path.join(save_path, fn.replace('.json', '.xlsx'))
     df.to_excel(save_path, encoding='utf8', index=False)
 
     return
