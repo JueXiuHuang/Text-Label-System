@@ -6,9 +6,6 @@ We highly recommend you read this document in browser, or view this document onl
 
 ## Contents
 * [How to use this tool](#how-to-use-this-tool)
-* Install
-  * [Windows guide](#windows-guide)
-  * [Mac guide](#mac-guide)
 * File Description
   * [Label Rule Folder](#label-rule-folder)
   * [Tokenize Rule Folder](#tokenize-rule-folder)
@@ -23,53 +20,17 @@ We highly recommend you read this document in browser, or view this document onl
 
 
 ## How to use this tool
-Step 1, install python if you haven't install it before. Refer to [Windows guide](#windows-guide) or [Mac guide](#mac-guide) for more details.
+![螢幕擷取畫面 2022-06-27 164133](https://user-images.githubusercontent.com/32955131/175899406-bbac423c-dc68-4b9a-8d1e-da8304a017ac.png)
+Go to release and download zip file according to your operating system.
 
-Step 2, put the text file into folder `Text-Label-System/Server/file/`.
+Unzip the file, your folder will contain these files:
+![image](https://user-images.githubusercontent.com/32955131/175899778-04abe376-6b69-4bec-b30e-b9eafd904725.png)
 
-Step 3, change the label rule file in `Text-Label-System/Server/data/Label Rule/`. Refer to [Label Rule Folder](#label-rule-folder) for more details.
+Go to Server folder, and execute server.exe to open local server.
+![exe](https://user-images.githubusercontent.com/32955131/175900103-149dc7b1-4e17-48bd-964d-bf094703ca69.png)
 
-Step 4, change the tokenize rule file according to your text file language with regular expression in `Text-Label-System/Server/data/Tokenize Rule/`. Refer to [Label Tree](#label-tree) for more details.
-
-Step 5, open server. Refer to [Start local server (Windows)](#start-local-server-windows) or [Start local server (Mac)](#start-local-server-mac) for more detail.
-
-Step 6, open web and start tagging! Refer to [Label System browser](#label-system-browser) and [Open Label System browser](#open-label-system-browser) for more details.
-
-
-## Install
-
-### Windows guide
-
-We need python3, please access [website](https://www.python.org/downloads/) to install python first.
-
-#### Check your python
-Open Terminal (Windows OS)
-![](https://i.imgur.com/GgFsk5v.png)
-
-After opening terminal, type `python --version` in the terminal, if you install python successfully, you can get installed python version.
-![](https://i.imgur.com/p9aCSpp.png)
-
-#### Install require packages
-Access to `Text-Label-System` folder and run `Install requirements.bat` file (just double click).
-![](https://i.imgur.com/VzUssRg.png)
-
-
-### Mac guide
-We need python3, please access [website](https://www.dataquest.io/blog/installing-python-on-mac/) to install python first.
-
-#### Check your python
-Open Terminal (Search 'Terminal' on spotlight)
-
-After opening terminal, type `python --version` in the terminal, if you install python successfully, you can get installed python version.
-![](https://i.imgur.com/p9aCSpp.png)
-
-#### Install require packages
-Open your terminal again, navigate to the Text-Label-System folder, it usually in your download folder.
-To navigate to certain folder, type `cd folder_name` in your termianl, and use `ls` to check what folder or files in your current directory.
-<img width="462" alt="截圖 2022-04-06 下午9 09 35" src="https://user-images.githubusercontent.com/32955131/161982281-3747e1c7-f6f3-4ae6-b0e4-d24743d2d229.png">
-
-After arrive Text-Label-System folder, type `bash Install_requirement.sh` to insall require packages.
-
+Back to the root folder, and go to Web folder, open webpage.html with browser, and you can use this label system.
+![html](https://user-images.githubusercontent.com/32955131/175900623-c5e5399c-423b-4d54-8a88-775fe5a71f20.png)
 
 
 ## File Description
