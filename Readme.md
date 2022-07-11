@@ -45,7 +45,6 @@ Once you have define your own label tree, put the file into this folder.
 
 ### Tokenize Rule Folder
 `Tokenize Rule` folder is under `Server/data` folder. This folder contains the tokenization rule file, whick describe your tokenization method in Regular Expression. Currently we provide English and Chinese tokenization and named the tokenization rule files as `English tokenize rule.txt` and `Chinese tokenize rule.txt` respectively.
-**Mention! Tokenize Rule Folder can only have ONE tokenization rule file.** If you want to use new tokenization rule, please remove old one.
 
 ### File Folder
 `file` folder is under `Server` folder. This folder contains the documents that you want to label. If you have a new document, just put it into this folder.
