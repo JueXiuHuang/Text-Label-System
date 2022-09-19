@@ -136,10 +136,10 @@ function click_download() {
         for (let j = 0; j < taggings[i]['args'].length; j++) {
             let start = taggings[i]['args'][j]['Start']
             let end = taggings[i]['args'][j]['End']
-            let tag_name = taggings[i]['args'][j]['Arg_type']
+            let tag_name = taggings[i]['abs_path'] + '_' + taggings[i]['args'][j]['Arg_type']
 
             cp_tokList[start] = '[' + cp_tokList[start]
-            cp_tokList[end - 1] = cp_tokList[end - 1] + ']' + tag_name
+            cp_tokList[end - 1] = cp_tokList[end - 1] + ']' + tag_name + ' '
         }
     }
 
@@ -447,9 +447,28 @@ function refresh_args_display() {
     }
 }
 
+function compare(tag_a, tag_b) {
+    rep_a = 1000000
+    rep_b = 1000000
+    for (let i = 0; i < tag_a['args'].length; i++) {
+        if (tag_a['args'][i]['Start'] < rep_a) {
+            rep_a = tag_a['args'][i]['Start']
+        }
+    }
+    for (let i = 0; i < tag_b['args'].length; i++) {
+        if (tag_b['args'][i]['Start'] < rep_b) {
+            rep_b = tag_b['args'][i]['Start']
+        }
+    }
+
+    return rep_a - rep_b
+}
+
 // refresh the tags display area
 function refresh_tag_display() {
     reset_tag_display();
+
+    taggings.sort(compare);
 
     for (let i = 0; i < taggings.length; i++) {
         let wrapper;
